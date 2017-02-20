@@ -1,0 +1,29 @@
+{
+  "name": "waterline-to-json-schema",
+  "version": "0.0.0",
+  "description": "WaterlineJS to JSON schema generator",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goliatone/waterline-to-json-schema.git"
+  },
+  "keywords": [
+    "json-schema",
+    "waterline"
+  ],
+  "author": "goliatone <hello@goliatone.com> (http://goliatone.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/goliatone/waterline-to-json-schema/issues"
+  },
+  "homepage": "https://github.com/goliatone/waterline-to-json-schema#readme",
+  "devDependencies": {
+    "uuid": "^3.0.1"
+  }
+}
