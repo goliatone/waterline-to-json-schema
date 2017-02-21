@@ -34,10 +34,15 @@ function transformModel(model){
     //https://github.com/balderdashy/waterline-docs/blob/master/models/configuration.md#schema
     output.additionalProperties = !model.schema;
 
+    //TODO: Add createdAt & updatedAt
     itr(model.attributes, (attr, name)=>{
         if(attr.hasOwnProperty('required')) output.required.push(name);
 
         let property = output.properties[name] = {};
+
+        if(attr.hasOwnProperty('primaryKey')){
+            property.primaryKey = attr.primaryKey;
+        }
 
         property.title = titleize(name);
         if(attr.description) property.description = attr.description;
@@ -102,6 +107,7 @@ function transformModel(model){
 
         //TODO: Pull patterns from validator.js. This
         //patterns assume "en"
+        //TODO: regex should be in string form.
         if(property.format === 'alpa'){
             property.pattern = /^[A-Z]+$/i;
         }
