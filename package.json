@@ -1,6 +1,6 @@
 {
   "name": "waterline-to-json-schema",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "WaterlineJS to JSON schema generator",
   "main": "index.js",
   "directories": {
