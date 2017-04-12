@@ -3,6 +3,9 @@
   "version": "0.1.1",
   "description": "WaterlineJS to JSON schema generator",
   "main": "index.js",
+  "bin": {
+    "waterline-schema": "./bin/cli"
+  },
   "directories": {
     "example": "example"
   },
