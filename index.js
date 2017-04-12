@@ -186,7 +186,7 @@ function transformModel(model){
             if(attr.hasOwnProperty('collection')){
                 property.type = 'array';
                 property.items = {
-                    $ref: '#/definitions/' + attr.collection
+                    $ref: '#/definitions/' + (attr.collection).toLowerCase()
                 };
                 property.via = attr.via;//<-- this is non standard!!
             }
