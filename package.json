@@ -25,5 +25,8 @@
   "homepage": "https://github.com/goliatone/waterline-to-json-schema#readme",
   "devDependencies": {
     "uuid": "^3.0.1"
+  },
+  "dependencies": {
+    "pretty-camel": "0.0.8"
   }
 }
