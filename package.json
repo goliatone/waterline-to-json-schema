@@ -30,6 +30,7 @@
     "uuid": "^3.0.1"
   },
   "dependencies": {
+    "caporal": "^0.4.1",
     "pretty-camel": "0.0.8"
   }
 }
