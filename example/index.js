@@ -4,4 +4,4 @@
 const Schema = require('..');
 const models = require('./models');
 
-console.log(JSON.stringify(Schema(models), null, 4));
+console.log(JSON.stringify(Schema(models, {uriPrefix: 'admin'}), null, 4));
