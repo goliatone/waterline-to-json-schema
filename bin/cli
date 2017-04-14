@@ -1,1 +1,38 @@
 #!/usr/bin/env node
+
+'use strict';
+
+const prog = require('caporal');
+
+const pkg = require('../package.json');
+
+prog
+    .version(pkg.version)
+    .description(pkg.description)
+    .command('collect', 'Collect metadata from waterline models')
+    .argument('[source]', 'Path to directory', /.*/, './models')
+    .action((args, options, logger) => {
+        console.log(args, options);
+        logger.info(args, options);
+
+        const CollectCommand = require('../lib/commands/collect');
+        const command = new CollectCommand({
+            logger: logger
+        });
+    });
+
+prog
+    .command('generate', 'Generate schema from model data')
+    .argument('[source]', 'Path to directory with models', /.*/, './models')
+    .argument('[output]', 'Where to output. Defaults to stdout. You can pass a directory.')
+    .action((args, options, logger) =>{
+        console.log(args, options);
+        logger.info(args, options);
+
+        const GenerateCommand = require('../lib/commands/generate');
+        const command = new GenerateCommand({
+            logger: logger
+        });
+    });
+
+prog.parse(process.argv);
