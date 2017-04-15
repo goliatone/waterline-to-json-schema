@@ -1,25 +1,20 @@
 #!/usr/bin/env node
-
-// https://github.com/omidfi/moro/blob/master/bin/moro.js
-// https://github.com/kevin940726/muzier-cli/blob/master/index.js
-// https://github.com/dbankier/s3a/blob/master/bin/s3a
-// https://github.com/Kronos-Integration/kronos-cluster-node
 'use strict';
 
 const prog = require('caporal');
-
 const pkg = require('../package.json');
+const CollectCommand = require('../lib/commands/collect');
+const GenerateCommand = require('../lib/commands/generate');
 
 prog
     .version(pkg.version)
     .description(pkg.description)
-    .command('collect', 'Collect metadata from waterline models')
-    .argument('[source]', 'Path to directory', /.*/, './models')
+    .command('collect', 'Collect metadata from waterline models and generates a JSON schema file')
+    .argument('[source]', 'Path to directory', /.*/, CollectCommand.DEFAULTS.source)
+    .argument('[output]', 'Filename for output.', /.*/, CollectCommand.DEFAULTS.output)
     .action((args, options, logger) => {
-        console.log(args, options);
-        logger.info(args, options);
 
-        const CollectCommand = require('../lib/commands/collect');
+
         const command = new CollectCommand({
             logger: logger
         });
@@ -29,15 +24,18 @@ prog
 
 prog
     .command('generate', 'Generate schema from model data')
-    .argument('[source]', 'Path to directory with models', /.*/, './models')
-    .argument('[output]', 'Where to output. Defaults to stdout. You can pass a directory.')
+    .argument('[source]', 'Path to directory with models', /.*/, GenerateCommand.DEFAULTS.source)
+    .argument('[output]', 'Filename for output.', /.*/, GenerateCommand.DEFAULTS.output)
+    .option('--uri-prefix <prefix>', 'Add <prefix> to all element ids')
     .action((args, options, logger) => {
         console.log(args, options);
-        logger.info(args, options);
 
-        const GenerateCommand = require('../lib/commands/generate');
         const command = new GenerateCommand({
             logger: logger
+        });
+
+        command.execute({
+            options: options
         });
     });
 
