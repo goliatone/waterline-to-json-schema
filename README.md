@@ -8,6 +8,28 @@ This library provides a cli utility, `waterline-schema`, with two commands:
 * `collect `
 * `generate`
 
+```
+waterline-schema 0.2.1 - WaterlineJS to JSON schema generator
+
+USAGE
+
+  waterline-schema <command> [options]
+
+COMMANDS
+
+  collect [source] [output]       Collect metadata from waterline models and generates a JSON schema file
+  generate [source] [output]      Generate schema from model data                                        
+  help <command>                  Display help for a specific command                                    
+
+GLOBAL OPTIONS
+
+  -h, --help         Display help                                      
+  -V, --version      Display version                                   
+  --no-color         Disable colors                                    
+  --quiet            Quiet mode - only displays warn and error messages
+  -v, --verbose      Verbose mode - will also output debug messages   
+```  
+
 #### Collect
 Collect will go over all files in a given directory and generate a JSON file with all the model definitions. Note that for now, the command relies on the models exposing an `schema` object.
 
