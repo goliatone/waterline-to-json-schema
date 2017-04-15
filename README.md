@@ -1,6 +1,6 @@
 ## WaterlineJS to JSON schema converter
 
-Convert Waterline model definitions to [JSON schema][js].
+Convert Waterline model definitions to [JSON schema][js]. You can then use this generated JSON with tools such as [core.io-cli-view-generator][core.io-cli-view-generator].
 
 ### CLI
 This library provides a cli utility, `waterline-schema`, with two commands:
@@ -38,6 +38,8 @@ The generate command will take a JSON file with definitions of Waterline models,
 
 ### TODO
 
+- [ ] Do swagger output from schema?
+- [ ] Remove `"required": []` if empty.
 - [ ] Identify primary key
     - [ ] if not pk show warning.
 - [ ] generate report with:
@@ -50,7 +52,7 @@ The generate command will take a JSON file with definitions of Waterline models,
         - [ ] ensure we have a default for items or provide one
 
 [js]:http://json-schema.org/
-
+[core.io-cli-view-generator]:https://github.com/goliatone/core.io-cli-view-generator
 
 <!--
 https://www.npmjs.com/package/json-schema-ref-parser
