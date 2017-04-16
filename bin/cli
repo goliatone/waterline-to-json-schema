@@ -3,8 +3,8 @@
 
 const prog = require('caporal');
 const pkg = require('../package.json');
-const CollectCommand = require('../lib/commands/collect');
-const GenerateCommand = require('../lib/commands/generate');
+const CollectCommand = require('../commands/collect');
+const GenerateCommand = require('../commands/generate');
 
 prog
     .version(pkg.version)
