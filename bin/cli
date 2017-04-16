@@ -28,7 +28,6 @@ prog
     .argument('[output]', 'Filename for output.', /.*/, GenerateCommand.DEFAULTS.output)
     .option('--uri-prefix <prefix>', 'Add <prefix> to all element ids')
     .action((args, options, logger) => {
-        console.log(args, options);
 
         const command = new GenerateCommand({
             logger: logger
