@@ -77,6 +77,9 @@ The generate command will take a JSON file with definitions of Waterline models,
 [core.io-cli-view-generator]:https://github.com/goliatone/core.io-cli-view-generator
 
 <!--
+https://github.com/raml2html/raml2html
+https://www.npmjs.com/package/raml-jsonschema-expander
+
 https://www.npmjs.com/package/json-schema-ref-parser
 
 https://www.npmjs.com/package/json-schema-docs-generator
