@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 'use strict';
 
 const prog = require('caporal');
@@ -13,8 +14,6 @@ prog
     .argument('[source]', 'Path to directory', /.*/, CollectCommand.DEFAULTS.source)
     .argument('[output]', 'Filename for output.', /.*/, CollectCommand.DEFAULTS.output)
     .action((args, options, logger) => {
-
-
         const command = new CollectCommand({
             logger: logger
         });
@@ -33,9 +32,9 @@ prog
             logger: logger
         });
 
-        command.execute({
-            options: options
-        });
+        args.options = options;
+
+        command.execute(args);
     });
 
 prog.parse(process.argv);
