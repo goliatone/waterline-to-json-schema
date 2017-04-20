@@ -20,10 +20,17 @@ class CollectCommand {
         event.source = resolve(event.source);
         event.output = resolve(event.output);
 
-        return this.loadFiles(event.source).then((files) => {
+        this.logger.debug('Look for files at: %s', event.source);
+
+        return this.loadFiles(event.source).then((files=[]) => {
             let model, output = [];
 
+            this.logger.debug('Collected %s files.', files.length);
+            if(files.length === 0) {
+                this.logger.warn('No files found.');
+            }
             files.map((filepath) => {
+                this.logger.debug('Process file: %s', filepath);
                 filepath = join(event.source, filepath);
                 model = require(filepath);
                 output.push(model.schema);
