@@ -1,6 +1,7 @@
 'use strict';
 
 const extend = require('gextend');
+const BaseCommand = require('./base');
 const glob = require('globby');
 const join = require('path').join;
 const resolve = require('path').resolve;
@@ -8,11 +9,7 @@ const writeFile = require('fs').writeFile;
 
 
 
-class CollectCommand {
-
-    constructor(options = {}) {
-        extend(this, options);
-    }
+class CollectCommand extends BaseCommand {
 
     execute(event) {
         event = extend({}, CollectCommand.DEFAULTS, event);
@@ -74,11 +71,29 @@ class CollectCommand {
     loadFiles(src) {
         return glob(['*.js'], {cwd:src});
     }
+
+    static describe(prog, cmd){
+
+        cmd.argument('[source]', 
+            'Path to directory', 
+            /.*/, 
+            CollectCommand.DEFAULTS.source
+        );
+
+        cmd.argument('[output]', 
+            'Filename for output.', 
+            /.*/, 
+            CollectCommand.DEFAULTS.output
+        );
+    }
 }
 
 CollectCommand.DEFAULTS = {
     source: './models',
     output: './waterline.json'
 };
+
+CollectCommand.COMMAND_NAME = 'collect';
+CollectCommand.DESCRIPTION = 'Collect metadata from waterline models and generates a JSON schema file';
 
 module.exports = CollectCommand;
