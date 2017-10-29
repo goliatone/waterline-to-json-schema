@@ -1,7 +1,7 @@
 'use strict';
 
 const extend = require('gextend');
-const BaseCommand = require('./base');
+const BaseCommand = require('base-cli-commands').BaseCommand;
 
 const join = require('path').join;
 const resolve = require('path').resolve;
