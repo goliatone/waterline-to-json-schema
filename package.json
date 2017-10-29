@@ -30,11 +30,9 @@
     "uuid": "^3.0.1"
   },
   "dependencies": {
-    "caporal": "^0.4.1",
-    "child-process-promise": "^2.2.1",
+    "base-cli-commands": "0.0.3",
     "gextend": "^0.3.0",
     "globby": "^6.1.0",
-    "pretty-camel": "0.0.8",
-    "update-notifier": "^2.3.0"
+    "pretty-camel": "0.0.8"
   }
 }
