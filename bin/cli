@@ -1,20 +1,11 @@
 #!/usr/bin/env node
-
 'use strict';
 
-const pkg = require('../package.json');
-const prog = require('caporal');
-const Commands = require('../commands');
-const updateNotifier = require('update-notifier');
+const CliApp = require('base-cli-commands').CliApp;
 
-updateNotifier({
-    pkg: pkg
-}).notify();
+const app = new CliApp({
+    commands: require('../commands'),
+    package: require('../package.json')
+});
 
-prog
-    .version(pkg.version)
-    .description(pkg.description);
-
-Commands.attach(prog);
-
-prog.parse(process.argv);
+app.run(process.argv);
