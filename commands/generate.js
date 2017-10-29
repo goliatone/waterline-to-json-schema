@@ -1,6 +1,8 @@
 'use strict';
 
 const extend = require('gextend');
+const BaseCommand = require('./base');
+
 const join = require('path').join;
 const resolve = require('path').resolve;
 const writeFile = require('fs').writeFile;
@@ -8,11 +10,7 @@ const readFile = require('fs').readFile;
 
 const Schema = require('..');
 
-class GenerateCommand {
-
-    constructor(options = {}) {
-        extend(this, options);
-    }
+class GenerateCommand extends BaseCommand {
 
     execute(event) {
         event = extend({}, GenerateCommand.DEFAULTS, event);
@@ -63,6 +61,24 @@ class GenerateCommand {
             });
         });
     }
+
+    static describe(prog, cmd){
+        cmd.argument('[source]', 
+            'Path to directory with models', 
+            /.*/, 
+            GenerateCommand.DEFAULTS.source
+        );
+        
+        cmd.argument('[output]', 
+            'Filename for output.', 
+            /.*/, 
+            GenerateCommand.DEFAULTS.output
+        );
+        
+        cmd.option('--uri-prefix <prefix>', 
+            'Add <prefix> to all element ids'
+        );
+    }
 }
 
 GenerateCommand.DEFAULTS = {
@@ -70,5 +86,8 @@ GenerateCommand.DEFAULTS = {
     output: './schema.json',
     options: {}
 };
+
+GenerateCommand.COMMAND_NAME = 'generate';
+GenerateCommand.DESCRIPTION = 'Generate schema from model data';
 
 module.exports = GenerateCommand;
