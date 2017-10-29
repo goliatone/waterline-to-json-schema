@@ -2,39 +2,19 @@
 
 'use strict';
 
-const prog = require('caporal');
 const pkg = require('../package.json');
-const CollectCommand = require('../commands/collect');
-const GenerateCommand = require('../commands/generate');
+const prog = require('caporal');
+const Commands = require('../commands');
+const updateNotifier = require('update-notifier');
+
+updateNotifier({
+    pkg: pkg
+}).notify();
 
 prog
     .version(pkg.version)
-    .description(pkg.description)
-    .command('collect', 'Collect metadata from waterline models and generates a JSON schema file')
-    .argument('[source]', 'Path to directory', /.*/, CollectCommand.DEFAULTS.source)
-    .argument('[output]', 'Filename for output.', /.*/, CollectCommand.DEFAULTS.output)
-    .action((args, options, logger) => {
-        const command = new CollectCommand({
-            logger: logger
-        });
+    .description(pkg.description);
 
-        command.execute(args);
-    });
-
-prog
-    .command('generate', 'Generate schema from model data')
-    .argument('[source]', 'Path to directory with models', /.*/, GenerateCommand.DEFAULTS.source)
-    .argument('[output]', 'Filename for output.', /.*/, GenerateCommand.DEFAULTS.output)
-    .option('--uri-prefix <prefix>', 'Add <prefix> to all element ids')
-    .action((args, options, logger) => {
-
-        const command = new GenerateCommand({
-            logger: logger
-        });
-
-        args.options = options;
-
-        command.execute(args);
-    });
+Commands.attach(prog);
 
 prog.parse(process.argv);
