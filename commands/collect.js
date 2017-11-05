@@ -30,7 +30,10 @@ class CollectCommand extends BaseCommand {
                 this.logger.debug('Process file: %s', filepath);
                 filepath = join(event.source, filepath);
                 model = require(filepath);
-                output.push(model.schema);
+                if(model) output.push(model.schema);
+                else {
+                    this.logger.warn('Model file %s does not expose an schema property', filepath);
+                }
             });
 
             return this.serializeOutput(event.output, output);
