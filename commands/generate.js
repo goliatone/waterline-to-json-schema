@@ -33,7 +33,7 @@ class GenerateCommand extends BaseCommand {
             return err;
         });
     }
-
+    //@TODO Make BaseCommand.loadJSON
     loadSchema(filepath) {
         return new Promise((resolve, reject) => {
             readFile(filepath, 'utf-8', (err, content) => {
@@ -47,7 +47,7 @@ class GenerateCommand extends BaseCommand {
             });
         });
     }
-
+    //@TODO Make BaseCommand.saveJSON
     serializeOutput(filename, output) {
         return new Promise((resolve, reject) => {
             try {
