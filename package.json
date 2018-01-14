@@ -30,7 +30,7 @@
     "uuid": "^3.0.1"
   },
   "dependencies": {
-    "base-cli-commands": "0.0.3",
+    "base-cli-commands": "*",
     "gextend": "^0.3.0",
     "globby": "^6.1.0",
     "pretty-camel": "0.0.8"
