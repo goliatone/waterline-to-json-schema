@@ -17,20 +17,21 @@ class CollectCommand extends BaseCommand {
         event.source = resolve(event.source);
         event.output = resolve(event.output);
 
-        this.logger.debug('Look for files at: %s', event.source);
+        this.logger.info('Look for files at: %s', event.source);
 
-        return this.loadFiles(event.source).then((files=[]) => {
+        return this.loadFiles(event.source).then((files = []) => {
             let model, output = [];
 
-            this.logger.debug('Collected %s files.', files.length);
-            if(files.length === 0) {
+            this.logger.info('Collected %s files.', files.length);
+            if (files.length === 0) {
                 this.logger.warn('No files found.');
             }
-            files.map((filepath) => {
-                this.logger.debug('Process file: %s', filepath);
+
+            files.map(filepath => {
+                this.logger.info('Process file: %s', filepath);
                 filepath = join(event.source, filepath);
                 model = require(filepath);
-                if(model) output.push(model.schema);
+                if (model) output.push(model.schema);
                 else {
                     this.logger.warn('Model file %s does not expose an schema property', filepath);
                 }
@@ -38,8 +39,10 @@ class CollectCommand extends BaseCommand {
 
             return this.serializeOutput(event.output, output);
 
-        }).catch((err) => {
-            console.log(err.message);
+        }).catch(err => {
+            this.logger.error('Error running script');
+            this.logger.error(err.message);
+            this.logger.error(err);
             return err;
         });
     }
@@ -64,28 +67,33 @@ class CollectCommand extends BaseCommand {
             } catch (e) {
                 return reject(e);
             }
-            writeFile(filename, output, (err)=> {
-                if(err) return reject(err);
+
+            writeFile(filename, output, err => {
+                if (err) return reject(err);
                 resolve(output);
             });
         });
     }
 
     loadFiles(src) {
-        return glob(['*.js'], {cwd:src});
+        console.log('src', src);
+        return glob(['*.js'], { cwd: src }).catch(e => {
+            console.error(e);
+            return e;
+        });
     }
 
-    static describe(prog, cmd){
+    static describe(prog, cmd) {
 
-        cmd.argument('[source]', 
-            'Path to directory', 
-            /.*/, 
+        cmd.argument('[source]',
+            'Path to directory with model definition JS files',
+            /.*/,
             CollectCommand.DEFAULTS.source
         );
 
-        cmd.argument('[output]', 
-            'Filename for output.', 
-            /.*/, 
+        cmd.argument('[output]',
+            'Filename for output.',
+            /.*/,
             CollectCommand.DEFAULTS.output
         );
     }

@@ -8,12 +8,12 @@ const resolve = require('path').resolve;
 const writeFile = require('fs').writeFile;
 const readFile = require('fs').readFile;
 
-const Schema = require('..');
+const Schema = require('..').jsonSchema;
 
-class GenerateCommand extends BaseCommand {
+class JSONSchemaCommand extends BaseCommand {
 
     execute(event) {
-        event = extend({}, GenerateCommand.DEFAULTS, event);
+        event = extend({}, JSONSchemaCommand.DEFAULTS, event);
 
         event.source = resolve(event.source);
         event.output = resolve(event.output);
@@ -39,9 +39,33 @@ class GenerateCommand extends BaseCommand {
     }
 
     /**
-     * @TODO Make BaseCommand.loadJSON
-     * @param {String} filepath Filepath
+     * We loose information here, by using
+     * `JSON.stringify` all functions are
+     * ommited in the output. For now this
+     * works well enough.
+     * Note that this method can be overriten
+     * by providing a function with the name
+     * `serializeOutput` in the options object.
+     *
+     * @param  {String} filename Filename for output
+     * @param  {Object} output   Object containing collected schema
+     * @return {Promise}         Promise
      */
+    serializeOutput(filename, output) {
+        return new Promise((resolve, reject) => {
+            try {
+                output = JSON.stringify(output, null, 4);
+            } catch (e) {
+                return reject(e);
+            }
+
+            writeFile(filename, output, err => {
+                if (err) return reject(err);
+                resolve(output);
+            });
+        });
+    }
+
     loadSchema(filepath) {
         return new Promise((resolve, reject) => {
             readFile(filepath, 'utf-8', (err, content) => {
@@ -56,51 +80,29 @@ class GenerateCommand extends BaseCommand {
         });
     }
 
-    /**
-     * @TODO Make BaseCommand.saveJSON
-     * @param {String} filename 
-     * @param {String} output 
-     */
-    serializeOutput(filename, output) {
-        return new Promise((resolve, reject) => {
-            try {
-                output = JSON.stringify(output, null, 4);
-            } catch (e) {
-                return reject(e);
-            }
-            writeFile(filename, output, (err) => {
-                if (err) return reject(err);
-                resolve(output);
-            });
-        });
-    }
-
     static describe(prog, cmd) {
+
         cmd.argument('[source]',
             'Path to directory with models',
             /.*/,
-            GenerateCommand.DEFAULTS.source
+            JSONSchemaCommand.DEFAULTS.source
         );
 
         cmd.argument('[output]',
             'Filename for output.',
             /.*/,
-            GenerateCommand.DEFAULTS.output
-        );
-
-        cmd.option('--uri-prefix <prefix>',
-            'Add <prefix> to all element ids'
+            JSONSchemaCommand.DEFAULTS.output
         );
     }
 }
 
-GenerateCommand.DEFAULTS = {
+JSONSchemaCommand.DEFAULTS = {
     source: './waterline.json',
-    output: './schema.json',
+    output: './json-schema.json',
     options: {}
 };
 
-GenerateCommand.COMMAND_NAME = 'generate';
-GenerateCommand.DESCRIPTION = 'Generate schema from model data';
+JSONSchemaCommand.COMMAND_NAME = 'json-schema';
+JSONSchemaCommand.DESCRIPTION = 'Generate JSON schema from Waterline metadata file.';
 
-module.exports = GenerateCommand;
+module.exports = JSONSchemaCommand;

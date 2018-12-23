@@ -2,13 +2,14 @@
 
 const Collect = require('./collect');
 const Generate = require('./generate');
+const JSONSchema = require('./json-schema');
 /**
  * Attach commands to given application context,
  * if a `namespace` is given then commands will 
  * be added as sub-commands.
  */
-module.exports.attach = function $attach(app, namespace=false) {
-    
+module.exports.attach = function $attach(app, namespace = false) {
+
     const context = {
         namespace,
         prog: app.prog
@@ -16,4 +17,5 @@ module.exports.attach = function $attach(app, namespace=false) {
 
     Collect.attach(context);
     Generate.attach(context);
+    JSONSchema.attach(context);
 };
