@@ -31,6 +31,7 @@ GLOBAL OPTIONS
 ```  
 
 #### Collect
+
 Collect will go over all files in a given directory and generate a JSON file with all the model definitions. Note that for now, the command relies on the models exposing an `schema` object.
 
 ```js
@@ -55,6 +56,7 @@ module.exports.schema = schema;
 ```
 
 #### Generate
+
 The generate command will take a JSON file with definitions of Waterline models, turn it into a valid JSON schema object, and save it to a file.
 
 

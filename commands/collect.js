@@ -7,8 +7,6 @@ const join = require('path').join;
 const resolve = require('path').resolve;
 const writeFile = require('fs').writeFile;
 
-
-
 class CollectCommand extends BaseCommand {
 
     execute(event) {
@@ -105,6 +103,6 @@ CollectCommand.DEFAULTS = {
 };
 
 CollectCommand.COMMAND_NAME = 'collect';
-CollectCommand.DESCRIPTION = 'Collect metadata from waterline models and generates a JSON schema file';
+CollectCommand.DESCRIPTION = 'Collect metadata from waterline models and generates a JSON file with the model definitions';
 
 module.exports = CollectCommand;
