@@ -18,7 +18,9 @@ class GenerateCommand extends BaseCommand {
         event.source = resolve(event.source);
         event.output = resolve(event.output);
 
-        this.logger.info('Look for files at: %s', event.source);
+        event.options.logger = this.logger;
+
+        this.logger.debug('Look for files at: %s', event.source);
 
         return this.loadSchema(event.source).then(models => {
             return new Promise((resolve, reject) => {
@@ -77,7 +79,7 @@ class GenerateCommand extends BaseCommand {
 
     static describe(prog, cmd) {
         cmd.argument('[source]',
-            'Path to directory with models',
+            'Path to JSON file with model definition, generated via collect command',
             /.*/,
             GenerateCommand.DEFAULTS.source
         );
@@ -101,6 +103,6 @@ GenerateCommand.DEFAULTS = {
 };
 
 GenerateCommand.COMMAND_NAME = 'generate';
-GenerateCommand.DESCRIPTION = 'Generate schema from model data';
+GenerateCommand.DESCRIPTION = 'Transform a file with model definitions into json-schema format.';
 
 module.exports = GenerateCommand;
