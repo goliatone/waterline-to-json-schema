@@ -18,7 +18,7 @@ class JSONSchemaCommand extends BaseCommand {
         event.source = resolve(event.source);
         event.output = resolve(event.output);
 
-        this.logger.info('Look for files at: %s', event.source);
+        this.logger.debug('Look for files at: %s', event.source);
 
         return this.loadSchema(event.source).then(models => {
             return new Promise((resolve, reject) => {
@@ -30,10 +30,10 @@ class JSONSchemaCommand extends BaseCommand {
                 }
                 return this.serializeOutput(event.output, output);
             });
-        }).catch((err) => {
-            this.logger.error('Error running script');
+        }).catch(err => {
+            this.logger.error('json-schema: Error running script');
             this.logger.error(err.message);
-            this.logger.error(err);
+            this.logger.error(err.stack);
             return err;
         });
     }
