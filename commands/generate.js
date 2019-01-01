@@ -25,12 +25,14 @@ class GenerateCommand extends BaseCommand {
         return this.loadSchema(event.source).then(models => {
             return new Promise((resolve, reject) => {
                 let output;
+
                 try {
                     output = Schema(models, event.options);
                 } catch (e) {
                     return reject(e);
                 }
-                return this.serializeOutput(event.output, output);
+
+                return resolve(this.serializeOutput(event.output, output));
             });
         }).catch((err) => {
             this.logger.error('Error running script');
