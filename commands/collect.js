@@ -29,7 +29,13 @@ class CollectCommand extends BaseCommand {
                 this.logger.info('Process file: %s', filepath);
                 filepath = join(event.source, filepath);
                 model = require(filepath);
-                if (model) output.push(model.schema);
+                /**
+                 * TODO: If we wanted to filter out which models we 
+                 * collect, we could take an external script to filter.
+                 * filter = this.filter;
+                 * if(event.filter) filter = require(event.filter)
+                 */
+                if (model && model.schema) output.push(model.schema);
                 else {
                     this.logger.warn('Model file %s does not expose an schema property', filepath);
                 }
@@ -74,7 +80,6 @@ class CollectCommand extends BaseCommand {
     }
 
     loadFiles(src) {
-        console.log('src', src);
         return glob(['*.js'], { cwd: src }).catch(e => {
             console.error(e);
             return e;
