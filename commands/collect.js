@@ -3,17 +3,36 @@
 const extend = require('gextend');
 const BaseCommand = require('base-cli-commands').BaseCommand;
 const glob = require('globby');
-const join = require('path').join;
-const resolve = require('path').resolve;
-const writeFile = require('fs').writeFile;
+const { join, resolve } = require('path');
+const { writeFile, existsSync } = require('fs');
 
 class CollectCommand extends BaseCommand {
 
+    /**
+     * We can pass a path to a js file we can use to filter 
+     * out models so that they are not collected.
+     * 
+     * ```js
+     * module.exports = function filter(model){
+     *   if(!model || !model.schema) return true;
+     *   //only models in this array will be collected
+     *   const okModels = ['device', 'config', 'metadata'];
+     *   if(okModels.includes(model.schema.identity)) return false;
+     *   return true;
+     * };
+     * ```
+     * @param {Object} event Event object
+     * @param {String} [event.source="./models"] Path to models dir
+     * @param {String} [event.output="./waterline.json"] Path to output file 
+     * @param {String} event.filter Path to JS filter file 
+     */
     execute(event) {
         event = extend({}, CollectCommand.DEFAULTS, event);
 
         event.source = resolve(event.source);
         event.output = resolve(event.output);
+
+        this._parseFilter(event);
 
         this.logger.info('Look for files at: %s', event.source);
 
@@ -29,15 +48,16 @@ class CollectCommand extends BaseCommand {
                 this.logger.info('Process file: %s', filepath);
                 filepath = join(event.source, filepath);
                 model = require(filepath);
+
                 /**
                  * TODO: If we wanted to filter out which models we 
                  * collect, we could take an external script to filter.
                  * filter = this.filter;
                  * if(event.filter) filter = require(event.filter)
                  */
-                if (model && model.schema) output.push(model.schema);
+                if (!this.filter(model)) output.push(model.schema);
                 else {
-                    this.logger.warn('Model file %s does not expose an schema property', filepath);
+                    this.logger.warn('Model file %s has been filetered out', filepath);
                 }
             });
 
@@ -49,6 +69,23 @@ class CollectCommand extends BaseCommand {
             this.logger.error(err);
             return err;
         });
+    }
+
+    filter(model) {
+        return !model || !model.schema;
+    }
+
+    /**
+     * 
+     * @param {Object} event 
+     */
+    _parseFilter(event) {
+        if (!event.options || !event.options.filter) return;
+        event.options.filter = resolve(event.options.filter);
+        if (!existsSync(event.options.filter)) throw new Error('Filter file does not exist');
+        let f = require(event.options.filter);
+        if (!typeof f === 'function') throw new Error('Wrong type');
+        this.filter = f.bind(this);
     }
 
     /**
@@ -99,12 +136,18 @@ class CollectCommand extends BaseCommand {
             /.*/,
             CollectCommand.DEFAULTS.output
         );
+
+        cmd.option('--filter <filter>',
+            'Path to file to filter models to be collected.',
+            /.*\.js/
+        )
     }
 }
 
 CollectCommand.DEFAULTS = {
     source: './models',
-    output: './waterline.json'
+    output: './waterline.json',
+    options: {}
 };
 
 CollectCommand.COMMAND_NAME = 'collect';
