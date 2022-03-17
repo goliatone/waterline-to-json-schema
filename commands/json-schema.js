@@ -41,9 +41,9 @@ class JSONSchemaCommand extends BaseCommand {
     /**
      * We loose information here, by using
      * `JSON.stringify` all functions are
-     * ommited in the output. For now this
+     * omitted in the output. For now this
      * works well enough.
-     * Note that this method can be overriten
+     * Note that this method can be overridden
      * by providing a function with the name
      * `serializeOutput` in the options object.
      *
@@ -83,15 +83,17 @@ class JSONSchemaCommand extends BaseCommand {
     static describe(prog, cmd) {
 
         cmd.argument('[source]',
-            'Path to directory with models',
-            /.*/,
-            JSONSchemaCommand.DEFAULTS.source
+            'Path to directory with models', {
+                validator: /.*/,
+                default: JSONSchemaCommand.DEFAULTS.source
+            }
         );
 
         cmd.argument('[output]',
-            'Filename for output.',
-            /.*/,
-            JSONSchemaCommand.DEFAULTS.output
+            'Filename for output.', {
+                validator: /.*/,
+                default: JSONSchemaCommand.DEFAULTS.output
+            }
         );
     }
 }

@@ -62,8 +62,8 @@ class GenerateCommand extends BaseCommand {
 
     /**
      * @TODO Make BaseCommand.saveJSON
-     * @param {String} filename 
-     * @param {String} output 
+     * @param {String} filename
+     * @param {String} output
      */
     serializeOutput(filename, output) {
         return new Promise((resolve, reject) => {
@@ -81,15 +81,17 @@ class GenerateCommand extends BaseCommand {
 
     static describe(prog, cmd) {
         cmd.argument('[source]',
-            'Path to JSON file with model definition, generated via collect command',
-            /.*/,
-            GenerateCommand.DEFAULTS.source
+            'Path to JSON file with model definition, generated via collect command', {
+                validator: /.*/,
+                default: GenerateCommand.DEFAULTS.source
+            }
         );
 
         cmd.argument('[output]',
-            'Filename for output.',
-            /.*/,
-            GenerateCommand.DEFAULTS.output
+            'Filename for output.', {
+                validator: /.*/,
+                default: GenerateCommand.DEFAULTS.output
+            }
         );
 
         cmd.option('--uri-prefix <prefix>',
