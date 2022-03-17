@@ -9,9 +9,9 @@ const { writeFile, existsSync } = require('fs');
 class CollectCommand extends BaseCommand {
 
     /**
-     * We can pass a path to a js file we can use to filter 
+     * We can pass a path to a js file we can use to filter
      * out models so that they are not collected.
-     * 
+     *
      * ```js
      * module.exports = function filter(model){
      *   if(!model || !model.schema) return true;
@@ -23,8 +23,8 @@ class CollectCommand extends BaseCommand {
      * ```
      * @param {Object} event Event object
      * @param {String} [event.source="./models"] Path to models dir
-     * @param {String} [event.output="./waterline.json"] Path to output file 
-     * @param {String} event.filter Path to JS filter file 
+     * @param {String} [event.output="./waterline.json"] Path to output file
+     * @param {String} event.filter Path to JS filter file
      */
     execute(event) {
         event = extend({}, CollectCommand.DEFAULTS, event);
@@ -50,7 +50,7 @@ class CollectCommand extends BaseCommand {
                 model = require(filepath);
 
                 /**
-                 * TODO: If we wanted to filter out which models we 
+                 * TODO: If we wanted to filter out which models we
                  * collect, we could take an external script to filter.
                  * filter = this.filter;
                  * if(event.filter) filter = require(event.filter)
@@ -76,8 +76,8 @@ class CollectCommand extends BaseCommand {
     }
 
     /**
-     * 
-     * @param {Object} event 
+     *
+     * @param {Object} event
      */
     _parseFilter(event) {
         if (!event.options || !event.options.filter) return;
@@ -91,9 +91,9 @@ class CollectCommand extends BaseCommand {
     /**
      * We loose information here, by using
      * `JSON.stringify` all functions are
-     * ommited in the output. For now this
+     * omitted in the output. For now this
      * works well enough.
-     * Note that this method can be overriten
+     * Note that this method can be overridden
      * by providing a function with the name
      * `serializeOutput` in the options object.
      *
@@ -126,20 +126,23 @@ class CollectCommand extends BaseCommand {
     static describe(prog, cmd) {
 
         cmd.argument('[source]',
-            'Path to directory with model definition JS files',
-            /.*/,
-            CollectCommand.DEFAULTS.source
+            'Path to directory with model definition JS files', {
+                validator: /.*/,
+                default: CollectCommand.DEFAULTS.source
+            }
         );
 
         cmd.argument('[output]',
-            'Filename for output.',
-            /.*/,
-            CollectCommand.DEFAULTS.output
+            'Filename for output.', {
+                validator: /.*/,
+                default: CollectCommand.DEFAULTS.output
+            }
         );
 
         cmd.option('--filter <filter>',
-            'Path to file to filter models to be collected.',
-            /.*\.js/
+            'Path to file to filter models to be collected.', {
+                validator: /.*\.js/
+            }
         )
     }
 }
